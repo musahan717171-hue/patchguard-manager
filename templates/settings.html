@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.settings }}{% endblock %}
+{% block content %}
+<section class="panel settings-grid">
+    <div class="settings-card">
+        <h3>{{ tr.language_selection }}</h3>
+        <select class="wide-select" data-language-switcher>
+            <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+            <option value="ru" {% if lang == 'ru' %}selected{% endif %}>Русский</option>
+            <option value="tk" {% if lang == 'tk' %}selected{% endif %}>Türkmençe</option>
+        </select>
+    </div>
+    <div class="settings-card">
+        <h3>{{ tr.theme_selection }}</h3>
+        <select class="wide-select" data-theme-switcher>
+            <option value="dark">{{ tr.dark }}</option>
+            <option value="light">{{ tr.light }}</option>
+        </select>
+    </div>
+    <div class="settings-card wide">
+        <h3>{{ tr.about_project }}</h3>
+        <p><strong>{{ tr.app_name }}</strong></p>
+        <p>{{ tr.coursework_topic }}</p>
+        <p>{{ tr.local_network_note }}</p>
+        <p>{{ tr.demo_credentials }}</p>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.education }}{% endblock %}
+{% block content %}
+<section class="panel education-grid">
+    <div class="education-card"><h3>{{ tr.education_title }}</h3><p>{{ tr.what_patch_management }}</p></div>
+    <div class="education-card"><h3>{{ tr.why_important_title }}</h3><p>{{ tr.why_important }}</p></div>
+    <div class="education-card"><h3>{{ tr.vulnerabilities_exploits_title }}</h3><p>{{ tr.vulnerabilities_exploits }}</p></div>
+    <div class="education-card"><h3>{{ tr.zero_day_title }}</h3><p>{{ tr.zero_day }}</p></div>
+    <div class="education-card"><h3>{{ tr.security_updates_title }}</h3><p>{{ tr.security_updates }}</p></div>
+    <div class="education-card"><h3>{{ tr.patch_testing_title }}</h3><p>{{ tr.patch_testing }}</p></div>
+    <div class="education-card"><h3>{{ tr.patch_deployment_title }}</h3><p>{{ tr.patch_deployment }}</p></div>
+    <div class="education-card"><h3>{{ tr.patch_compliance_title }}</h3><p>{{ tr.compliance }}</p></div>
+    <div class="education-card wide"><h3>{{ tr.best_practices_title }}</h3><p>{{ tr.lifecycle }}</p><p>{{ tr.best_practices }}</p></div>
+</section>
+{% endblock %}

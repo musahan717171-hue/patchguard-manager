@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.view_details }}{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="panel-title">
+        <div>
+            <h3>{{ tr.report_date }}: {{ report.created_at|date:"Y-m-d H:i" }}</h3>
+            <p>{{ tr.overall_risk_score }}: {{ report.assessment.risk_score }} | {{ tr.risk_level }}: {{ risk_label }} | {{ tr.patch_compliance }}: {{ report.assessment.compliance_percentage }}%</p>
+        </div>
+        <div class="button-row">
+            <a class="btn" href="{% url 'report_download_pdf' report.pk %}">{{ tr.download_pdf }}</a>
+            <a class="btn ghost" href="{% url 'history' %}">{{ tr.history }}</a>
+        </div>
+    </div>
+    <pre class="report-box">{{ report.report_text }}</pre>
+</section>
+{% endblock %}

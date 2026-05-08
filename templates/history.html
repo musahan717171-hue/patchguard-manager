@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.history }}{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="panel-title">
+        <h3>{{ tr.history }}</h3>
+        <a class="btn" href="{% url 'assessment' %}">{{ tr.patch_assessment }}</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ tr.report_date }}</th>
+                    <th>{{ tr.risk_score }}</th>
+                    <th>{{ tr.risk_level }}</th>
+                    <th>{{ tr.patch_compliance }}</th>
+                    <th>{{ tr.total_assets }}</th>
+                    <th>{{ tr.actions }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in reports_list %}
+                    <tr>
+                        <td>{{ item.report.created_at|date:"Y-m-d H:i" }}</td>
+                        <td>{{ item.report.assessment.risk_score }}</td>
+                        <td>{{ item.risk_level_label }}</td>
+                        <td>{{ item.report.assessment.compliance_percentage }}%</td>
+                        <td>{{ item.report.assessment.total_assets }}</td>
+                        <td class="actions-cell">
+                            <a class="btn mini ghost" href="{% url 'report_detail' item.report.pk %}">{{ tr.view_details }}</a>
+                            <form method="post" action="{% url 'report_delete' item.report.pk %}" data-confirm="{{ tr.confirm_delete }}">
+                                {% csrf_token %}
+                                <button class="btn mini danger" type="submit">{{ tr.delete_record }}</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6">{{ tr.no_history }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

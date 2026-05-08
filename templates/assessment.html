@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.patch_assessment }}{% endblock %}
+{% block content %}
+<section class="stats-grid">
+    <div class="stat"><span>{{ tr.total_assets }}</span><strong>{{ summary.total_assets }}</strong></div>
+    <div class="stat good"><span>{{ tr.patch_compliance }}</span><strong>{{ summary.compliance_percentage }}%</strong></div>
+    <div class="stat warning"><span>{{ tr.overall_risk_score }}</span><strong>{{ summary.risk_score }}</strong></div>
+    <div class="stat danger"><span>{{ tr.risk_level }}</span><strong>{{ summary.risk_level_label }}</strong></div>
+</section>
+
+<section class="panel">
+    <div class="panel-title">
+        <div>
+            <h3>{{ tr.assessment_summary }}</h3>
+            <p>{{ tr.hero_text }}</p>
+        </div>
+        <form method="post" action="{% url 'assessment_save' %}">
+            {% csrf_token %}
+            <button class="btn" type="submit">{{ tr.save_assessment }}</button>
+        </form>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ tr.asset_name }}</th>
+                    <th>{{ tr.patch_status }}</th>
+                    <th>{{ tr.detected_problem }}</th>
+                    <th>{{ tr.risk_score }}</th>
+                    <th>{{ tr.priority }}</th>
+                    <th>{{ tr.recommendation }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in analyses %}
+                    <tr>
+                        <td><strong>{{ item.asset.name }}</strong><br><small>{{ item.asset.software_name }} {{ item.asset.current_version }} → {{ item.asset.latest_version }}</small></td>
+                        <td><span class="badge status-{{ item.effective_status|slugify }}">{{ item.status_label }}</span></td>
+                        <td>{{ item.problem }}</td>
+                        <td><span class="badge risk-{{ item.risk_level|lower }}">{{ item.risk_score }} / {{ item.risk_level_label }}</span></td>
+                        <td>{{ item.priority_label }}</td>
+                        <td>{{ item.recommendation }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6">{{ tr.no_assets }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

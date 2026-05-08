@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.reports }}{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="panel-title">
+        <div>
+            <h3>{{ tr.generate_report }}</h3>
+            <p>{{ tr.report_conclusion }}</p>
+        </div>
+        <div class="button-row">
+            <a class="btn" href="{% url 'download_current_report_pdf' %}">{{ tr.download_pdf }}</a>
+            <form method="post" action="{% url 'assessment_save' %}">
+                {% csrf_token %}
+                <button class="btn ghost" type="submit">{{ tr.save_assessment }}</button>
+            </form>
+            <button class="btn ghost" onclick="window.print()">{{ tr.print }}</button>
+        </div>
+    </div>
+    <pre class="report-box">{{ report_text }}</pre>
+</section>
+{% endblock %}

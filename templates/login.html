@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tr.app_name }} - {{ tr.login }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="login-page">
+    <div class="login-background"></div>
+    <section class="login-card">
+        <div class="login-lang">
+            <select class="small-select" data-language-switcher>
+                <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+                <option value="ru" {% if lang == 'ru' %}selected{% endif %}>Русский</option>
+                <option value="tk" {% if lang == 'tk' %}selected{% endif %}>Türkmençe</option>
+            </select>
+        </div>
+        <div class="login-brand">
+            <img src="{% static 'img/logo.svg' %}" alt="PatchGuard logo">
+            <span>{{ tr.app_name }}</span>
+        </div>
+        <h1>{{ tr.login_title }}</h1>
+        <p>{{ tr.login_subtitle }}</p>
+        <p class="demo-line">{{ tr.demo_credentials }}</p>
+
+        {% if messages %}
+            <div class="messages compact">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <label>{{ tr.username }}</label>
+            {{ form.username }}
+            <label>{{ tr.password }}</label>
+            {{ form.password }}
+            <button class="btn full" type="submit">{{ tr.login }}</button>
+        </form>
+        <small>{{ tr.local_network_note }}</small>
+    </section>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

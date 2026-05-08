@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.dashboard }}{% endblock %}
+{% block content %}
+<section class="hero-card">
+    <div>
+        <span class="eyebrow">{{ tr.app_name }}</span>
+        <h2>{{ tr.hero_title }}</h2>
+        <p>{{ tr.hero_text }}</p>
+        <div class="hero-actions">
+            <a class="btn" href="{% url 'asset_create' %}">{{ tr.add_asset }}</a>
+            <a class="btn ghost" href="{% url 'assessment' %}">{{ tr.patch_assessment }}</a>
+        </div>
+    </div>
+    <div class="risk-meter risk-{{ summary.risk_level|lower }}">
+        <span>{{ tr.overall_risk_score }}</span>
+        <strong>{{ summary.risk_score }}</strong>
+        <em>{{ summary.risk_level_label }}</em>
+        <div class="progress"><i style="width: {{ summary.risk_score }}%"></i></div>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <div class="stat"><span>{{ tr.total_assets }}</span><strong>{{ summary.total_assets }}</strong></div>
+    <div class="stat good"><span>{{ tr.patched_systems }}</span><strong>{{ summary.patched_assets }}</strong></div>
+    <div class="stat warning"><span>{{ tr.outdated_systems }}</span><strong>{{ summary.outdated_assets }}</strong></div>
+    <div class="stat danger"><span>{{ tr.critical_assets }}</span><strong>{{ summary.critical_assets }}</strong></div>
+    <div class="stat danger"><span>{{ tr.missing_patches }}</span><strong>{{ summary.missing_patch_assets }}</strong></div>
+    <div class="stat"><span>{{ tr.patch_compliance }}</span><strong>{{ summary.compliance_percentage }}%</strong></div>
+</section>
+
+<section class="panel">
+    <div class="panel-title">
+        <h3>{{ tr.patch_assessment }}</h3>
+        <a class="btn small ghost" href="{% url 'assessment' %}">{{ tr.view_details }}</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ tr.asset_name }}</th>
+                    <th>{{ tr.software_name }}</th>
+                    <th>{{ tr.status }}</th>
+                    <th>{{ tr.risk_score }}</th>
+                    <th>{{ tr.priority }}</th>
+                    <th>{{ tr.recommendation }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in analyses %}
+                    <tr>
+                        <td><strong>{{ item.asset.name }}</strong></td>
+                        <td>{{ item.asset.software_name }}</td>
+                        <td><span class="badge status-{{ item.effective_status|slugify }}">{{ item.status_label }}</span></td>
+                        <td><span class="badge risk-{{ item.risk_level|lower }}">{{ item.risk_score }} / {{ item.risk_level_label }}</span></td>
+                        <td>{{ item.priority_label }}</td>
+                        <td>{{ item.recommendation }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6">{{ tr.no_assets }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

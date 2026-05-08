@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ tr.asset_inventory }}{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="panel-title">
+        <div>
+            <h3>{{ tr.asset_inventory }}</h3>
+            <p>{{ tr.local_network_note }}</p>
+        </div>
+        <a class="btn" href="{% url 'asset_create' %}">{{ tr.add_asset }}</a>
+    </div>
+    <form method="get" class="filters">
+        <input type="search" name="q" value="{{ search }}" placeholder="{{ tr.search }}">
+        <select name="status">
+            <option value="All" {% if status_filter == 'All' %}selected{% endif %}>{{ tr.all }}</option>
+            <option value="Patched" {% if status_filter == 'Patched' %}selected{% endif %}>{{ tr.status_patched }}</option>
+            <option value="Outdated" {% if status_filter == 'Outdated' %}selected{% endif %}>{{ tr.status_outdated }}</option>
+            <option value="Missing Patch" {% if status_filter == 'Missing Patch' %}selected{% endif %}>{{ tr.status_missing_patch }}</option>
+            <option value="Unknown" {% if status_filter == 'Unknown' %}selected{% endif %}>{{ tr.status_unknown }}</option>
+        </select>
+        <button class="btn ghost" type="submit">{{ tr.filter }}</button>
+    </form>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ tr.asset_name }}</th>
+                    <th>{{ tr.asset_type }}</th>
+                    <th>{{ tr.operating_system }}</th>
+                    <th>{{ tr.software_name }}</th>
+                    <th>{{ tr.current_version }}</th>
+                    <th>{{ tr.latest_version }}</th>
+                    <th>{{ tr.status }}</th>
+                    <th>{{ tr.criticality }}</th>
+                    <th>{{ tr.risk_score }}</th>
+                    <th>{{ tr.actions }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in analyses %}
+                    <tr>
+                        <td><strong>{{ item.asset.name }}</strong></td>
+                        <td>{{ item.asset_type_label }}</td>
+                        <td>{{ item.asset.operating_system }}</td>
+                        <td>{{ item.asset.software_name }}</td>
+                        <td>{{ item.asset.current_version }}</td>
+                        <td>{{ item.asset.latest_version }}</td>
+                        <td><span class="badge status-{{ item.effective_status|slugify }}">{{ item.status_label }}</span></td>
+                        <td>{{ item.criticality_label }}</td>
+                        <td><span class="badge risk-{{ item.risk_level|lower }}">{{ item.risk_score }}</span></td>
+                        <td class="actions-cell">
+                            <a class="btn mini ghost" href="{% url 'asset_edit' item.asset.pk %}">{{ tr.edit_asset }}</a>
+                            <form method="post" action="{% url 'asset_delete' item.asset.pk %}" data-confirm="{{ tr.confirm_delete }}">
+                                {% csrf_token %}
+                                <button class="btn mini danger" type="submit">{{ tr.delete }}</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="10">{{ tr.no_assets }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
